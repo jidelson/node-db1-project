@@ -35,9 +35,11 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     const account = req.body;
-    db("accounts").insert(account)
-    .then((accounts) => {
-        res.status(201).json({ inserted: accounts })
+    db("accounts")
+    .insert(account)
+    .returning("id")
+    .then((ids) => {
+        res.status(201).json({ inserted: ids })
     })
     .catch((error) => {
         console.log(error);
@@ -47,7 +49,8 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
     const changes = req.body;
-    const { id } = req.params;
+    const accountId = req.params.id;
+    
 
     db("accounts")
     .where({ id: accountId })
@@ -64,6 +67,10 @@ router.put('/:id', (req, res) => {
         res.status(500).json({ error: error.message })
     })
 });
+
+// router.put("/:id", (req, res) => {
+//     const accountId = req.params.id
+// })
 
 router.delete('/:id', (req, res) => {
     const accountId = req.params.id;
