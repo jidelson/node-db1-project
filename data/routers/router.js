@@ -35,8 +35,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     const account = req.body;
-    db.select("*")
-    .from("accounts")
+    db("accounts").insert(account)
     .then((accounts) => {
         res.status(201).json({ inserted: accounts })
     })
