@@ -17,10 +17,10 @@ router.get('/', (req, res) => {
     });
 
 router.get('/:id', (req, res) => {
-    const { id } = req.params;
+    const accountId = req.params.id;
 
-    db.select("*")
-    .from("accounts")
+    db("accounts")
+    .where({ id: accountId })
     .then((account) => {
         if(account[0] === undefined){
             res.status(404).json({ message: "That specified ID does not exist."})
@@ -51,7 +51,6 @@ router.put('/:id', (req, res) => {
     const changes = req.body;
     const accountId = req.params.id;
     
-
     db("accounts")
     .where({ id: accountId })
     .update(changes)
@@ -68,9 +67,6 @@ router.put('/:id', (req, res) => {
     })
 });
 
-// router.put("/:id", (req, res) => {
-//     const accountId = req.params.id
-// })
 
 router.delete('/:id', (req, res) => {
     const accountId = req.params.id;
